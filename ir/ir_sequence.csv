@@ -1,0 +1,5 @@
+sequence_type,strict
+"account.invoice.out_invoice",1
+"account.invoice.in_invoice",1
+"account.invoice.out_refund",1
+"account.invoice.in_refund",1
