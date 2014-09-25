@@ -113,7 +113,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Table input 2</from><to>source</to><enabled>N</enabled> </hop>  <hop> <from>target</from><to>Table output 2</to><enabled>N</enabled> </hop>  <hop> <from>Add constants</from><to>sequence_strict</to><enabled>Y</enabled> </hop>  <hop> <from>Modified Java Script Value</from><to>Execute SQL script</to><enabled>Y</enabled> </hop>  <hop> <from>sequence 2</from><to>Modified Java Script Value</to><enabled>Y</enabled> </hop>  <hop> <from>sequence 2</from><to>prep 2</to><enabled>Y</enabled> </hop>  <hop> <from>sequence_strict</from><to>sequence 2</to><enabled>Y</enabled> </hop>  <hop> <from>prep 2</from><to>target</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>Add constants</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>Table input 2</from><to>source</to><enabled>N</enabled> </hop>  <hop> <from>target</from><to>Table output 2</to><enabled>N</enabled> </hop>  <hop> <from>Add constants</from><to>sequence_strict</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>Add constants</to><enabled>Y</enabled> </hop>  <hop> <from>sequence_strict</from><to>prep 2</to><enabled>Y</enabled> </hop>  <hop> <from>prep 2</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>target</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>Add constants</name>
     <type>Constant</type>
@@ -203,13 +203,13 @@
         <precision>-1</precision>
       </field>
       <field>
-        <name>moves_code</name>
-        <type>String</type>
+        <name>sequence_active</name>
+        <type>Boolean</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
-        <nullif>account.move</nullif>
+        <nullif>Y</nullif>
         <length>-1</length>
         <precision>-1</precision>
       </field>
@@ -223,64 +223,28 @@
     </step>
 
   <step>
-    <name>Execute SQL script</name>
-    <type>ExecSQL</type>
+    <name>Select values</name>
+    <type>SelectValues</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <copies>1</copies>
          <partitioning>
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>target</connection>
-    <execute_each_row>Y</execute_each_row>
-    <single_statement>N</single_statement>
-    <replace_variables>N</replace_variables>
-    <sql>CREATE SEQUENCE ? INCREMENT BY ? START WITH ?</sql>
-    <insert_field/>
-    <update_field/>
-    <delete_field/>
-    <read_field/>
-    <arguments>
-       <argument><name>sequence_name</name></argument>
-       <argument><name>number_increment</name></argument>
-       <argument><name>number_next_internal</name></argument>
-    </arguments>
-     <cluster_schema/>
+    <fields>        <select_unspecified>N</select_unspecified>
+      <remove>        <name>invoice_code</name>
+      </remove>      <remove>        <name>number_increment</name>
+      </remove>      <remove>        <name>number_next_internal</name>
+      </remove>      <remove>        <name>type</name>
+      </remove>      <remove>        <name>timestamp_rounding</name>
+      </remove>      <remove>        <name>timestamp_offset</name>
+      </remove>      <remove>        <name>padding</name>
+      </remove>      <remove>        <name>sequence_active</name>
+      </remove>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>571</xloc>
-      <yloc>216</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Modified Java Script Value</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#47;&#47;Script here
-
-sequence_name = &quot;ir_sequence_&quot; + move_sequence;</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>sequence_name</name>
-        <rename>sequence_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>425</xloc>
-      <yloc>220</yloc>
+      <xloc>584</xloc>
+      <yloc>84</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -393,77 +357,8 @@ var out_credit_note_sequence = invoice_sequence;</jsScript_script>
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>532</xloc>
-      <yloc>81</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>sequence 2</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <schema/>
-    <table>ir_sequence</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>N</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>move_sequence</return_field>
-    <fields>
-        <field>
-          <column_name>timestamp_rounding</column_name>
-          <stream_name>timestamp_rounding</stream_name>
-        </field>
-        <field>
-          <column_name>timestamp_offset</column_name>
-          <stream_name>timestamp_offset</stream_name>
-        </field>
-        <field>
-          <column_name>type</column_name>
-          <stream_name>type</stream_name>
-        </field>
-        <field>
-          <column_name>number_increment</column_name>
-          <stream_name>number_increment</stream_name>
-        </field>
-        <field>
-          <column_name>number_next_internal</column_name>
-          <stream_name>number_next_internal</stream_name>
-        </field>
-        <field>
-          <column_name>name</column_name>
-          <stream_name>name</stream_name>
-        </field>
-        <field>
-          <column_name>code</column_name>
-          <stream_name>moves_code</stream_name>
-        </field>
-        <field>
-          <column_name>padding</column_name>
-          <stream_name>padding</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>430</xloc>
-      <yloc>81</yloc>
+      <xloc>494</xloc>
+      <yloc>82</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -528,11 +423,15 @@ var out_credit_note_sequence = invoice_sequence;</jsScript_script>
           <column_name>code</column_name>
           <stream_name>invoice_code</stream_name>
         </field>
+        <field>
+          <column_name>active</column_name>
+          <stream_name>sequence_active</stream_name>
+        </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>333</xloc>
-      <yloc>81</yloc>
+      <xloc>364</xloc>
+      <yloc>79</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
