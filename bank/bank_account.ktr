@@ -45,7 +45,7 @@
     <size_rowset>10000</size_rowset>
     <sleep_time_empty>50</sleep_time_empty>
     <sleep_time_full>50</sleep_time_full>
-    <unique_connections>N</unique_connections>
+    <unique_connections>Y</unique_connections>
     <feedback_shown>Y</feedback_shown>
     <feedback_size>50000</feedback_size>
     <using_thread_priorities>Y</using_thread_priorities>
@@ -74,7 +74,7 @@
     <type>POSTGRESQL</type>
     <access>Native</access>
     <database>${source}</database>
-    <port>${source_port}</port>
+    <port>5432</port>
     <username>${source_user}</username>
     <password>${source_password}</password>
     <servername/>
@@ -84,7 +84,7 @@
       <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>${source_port}</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>5432</attribute></attribute>
       <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
       <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
@@ -113,7 +113,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>OpenERP res_partner_bank</from><to>source</to><enabled>Y</enabled> </hop>  <hop> <from>BankAccount values</from><to>target</to><enabled>Y</enabled> </hop>  <hop> <from>create_uid</from><to>write_uid</to><enabled>Y</enabled> </hop>  <hop> <from>write_uid</from><to>Filter rows</to><enabled>Y</enabled> </hop>  <hop> <from>select-bank_account</from><to>BankAccount</to><enabled>N</enabled> </hop>  <hop> <from>Filter rows</from><to>BankAccount values</to><enabled>Y</enabled> </hop>  <hop> <from>target</from><to>select-bank_account</to><enabled>N</enabled> </hop>  <hop> <from>Filter rows 2</from><to>Strings cut</to><enabled>N</enabled> </hop>  <hop> <from>Filter rows 2</from><to>bank</to><enabled>N</enabled> </hop>  <hop> <from>bank_by_account</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>bank</from><to>create_uid</to><enabled>N</enabled> </hop>  <hop> <from>Select values</from><to>create_uid</to><enabled>Y</enabled> </hop>  <hop> <from>Strings cut</from><to>prep</to><enabled>Y</enabled> </hop>  <hop> <from>prep</from><to>bank_by_account</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>Replace in string</to><enabled>Y</enabled> </hop>  <hop> <from>Replace in string</from><to>Strings cut</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>OpenERP res_partner_bank</from><to>source</to><enabled>N</enabled> </hop>  <hop> <from>BankAccount values</from><to>target</to><enabled>Y</enabled> </hop>  <hop> <from>create_uid</from><to>write_uid</to><enabled>Y</enabled> </hop>  <hop> <from>write_uid</from><to>Filter rows</to><enabled>Y</enabled> </hop>  <hop> <from>select-bank_account</from><to>BankAccount</to><enabled>N</enabled> </hop>  <hop> <from>target</from><to>select-bank_account</to><enabled>N</enabled> </hop>  <hop> <from>Strings cut</from><to>prep</to><enabled>Y</enabled> </hop>  <hop> <from>prep</from><to>bank_by_account</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>Replace in string</to><enabled>Y</enabled> </hop>  <hop> <from>Replace in string</from><to>Strings cut</to><enabled>Y</enabled> </hop>  <hop> <from>bank_by_account</from><to>create_uid</to><enabled>Y</enabled> </hop>  <hop> <from>Generate Rows</from><to>party</to><enabled>Y</enabled> </hop>  <hop> <from>party</from><to>insert bank</to><enabled>Y</enabled> </hop>  <hop> <from>insert bank</from><to>Join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter rows</from><to>Join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter rows</from><to>union</to><enabled>Y</enabled> </hop>  <hop> <from>union</from><to>BankAccount values</to><enabled>Y</enabled> </hop>  <hop> <from>Select values 2</from><to>union</to><enabled>Y</enabled> </hop>  <hop> <from>Join</from><to>prep 2</to><enabled>Y</enabled> </hop>  <hop> <from>prep 2</from><to>Select values 2</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>BankAccount</name>
     <type>TableOutput</type>
@@ -145,7 +145,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1242</xloc>
+      <xloc>1274</xloc>
       <yloc>220</yloc>
       <draw>Y</draw>
       </GUI>
@@ -165,6 +165,7 @@
       <remove>        <name>create_uid</name>
       </remove>      <remove>        <name>write_uid</name>
       </remove>      <remove>        <name>bank</name>
+      </remove>      <remove>        <name>bank_by_account</name>
       </remove>      <meta>        <name>create_uid_target</name>
         <rename>create_uid</rename>
         <type>Integer</type>
@@ -203,7 +204,7 @@
         <storage_type/>
       </meta>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>908</xloc>
+      <xloc>940</xloc>
       <yloc>221</yloc>
       <draw>Y</draw>
       </GUI>
@@ -219,8 +220,8 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to/>
-<send_false_to/>
+<send_true_to>union</send_true_to>
+<send_false_to>Join</send_false_to>
     <compare>
 <condition>
  <negated>N</negated>
@@ -231,15 +232,15 @@
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>762</xloc>
+      <xloc>726</xloc>
       <yloc>220</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Filter rows 2</name>
-    <type>FilterRows</type>
+    <name>Generate Rows</name>
+    <type>RowGenerator</type>
     <description/>
     <distribute>Y</distribute>
     <copies>1</copies>
@@ -247,20 +248,76 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>bank</send_true_to>
-<send_false_to>Strings cut</send_false_to>
+    <fields>
+      <field>
+        <name>bank_code</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>NOBANK</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>bank_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>Non existing bank</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>bank_active</name>
+        <type>Boolean</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>N</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+    <limit>1</limit>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>477</xloc>
+      <yloc>327</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Join</name>
+    <type>JoinRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>%%java.io.tmpdir%%</directory>
+      <prefix>out</prefix>
+      <cache_size>500</cache_size>
+      <main/>
     <compare>
 <condition>
  <negated>N</negated>
- <leftvalue>bank</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
+ <leftvalue>new_bank_id</leftvalue>
+ <function>=</function>
+ <rightvalue>new_bank_id</rightvalue>
  </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>361</xloc>
-      <yloc>222</yloc>
+      <xloc>726</xloc>
+      <yloc>327</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -276,7 +333,7 @@
            <schema_name/>
            </partitioning>
     <connection>source</connection>
-    <sql>select * from res_partner_bank where id = 693;
+    <sql>select * from res_partner_bank;
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -322,17 +379,27 @@
         <whole_word>no</whole_word>
         <case_sensitive>no</case_sensitive>
       </field>
+      <field>
+        <in_stream_name>acc_number</in_stream_name>
+        <out_stream_name/>
+        <use_regex>no</use_regex>
+        <replace_string>IBAN</replace_string>
+        <replace_by_string/>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+      </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>273</xloc>
+      <xloc>232</xloc>
       <yloc>221</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Select values</name>
+    <name>Select values 2</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -342,11 +409,15 @@
            <schema_name/>
            </partitioning>
     <fields>        <select_unspecified>N</select_unspecified>
-      <remove>        <name>bank_by_account</name>
+      <remove>        <name>new_bank_id</name>
+      </remove>      <remove>        <name>new_party_id</name>
+      </remove>      <remove>        <name>bank_code</name>
+      </remove>      <remove>        <name>bank_name</name>
+      </remove>      <remove>        <name>bank_active</name>
       </remove>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>553</xloc>
-      <yloc>143</yloc>
+      <xloc>865</xloc>
+      <yloc>327</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -377,49 +448,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>258</xloc>
-      <yloc>141</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>bank</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>4</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <cache>Y</cache>
-    <cache_load_all>Y</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema>migration</schema>
-      <table>bank_mapping</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>bank</name>
-        <field>source</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>target</name>
-        <rename>target_bank</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>462</xloc>
-      <yloc>219</yloc>
+      <xloc>317</xloc>
+      <yloc>222</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -459,8 +489,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>459</xloc>
-      <yloc>142</yloc>
+      <xloc>467</xloc>
+      <yloc>222</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -507,6 +537,100 @@
     </step>
 
   <step>
+    <name>insert bank</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <schema>public</schema>
+    <table>bank</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>N</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>Y</return_keys>
+    <return_field>new_bank_id</return_field>
+    <fields>
+        <field>
+          <column_name>party</column_name>
+          <stream_name>new_party_id</stream_name>
+        </field>
+        <field>
+          <column_name>bic</column_name>
+          <stream_name>bank_code</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>640</xloc>
+      <yloc>327</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>party</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <schema>public</schema>
+    <table>party_party</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>N</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>Y</return_keys>
+    <return_field>new_party_id</return_field>
+    <fields>
+        <field>
+          <column_name>code</column_name>
+          <stream_name>bank_code</stream_name>
+        </field>
+        <field>
+          <column_name>name</column_name>
+          <stream_name>bank_name</stream_name>
+        </field>
+        <field>
+          <column_name>active</column_name>
+          <stream_name>bank_active</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>559</xloc>
+      <yloc>327</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>prep</name>
     <type>ScriptValueMod</type>
     <description/>
@@ -536,8 +660,38 @@ if (substr(bank_by_iban, 0, 2) == &apos;ES&apos;) {
         <replace>Y</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>354</xloc>
-      <yloc>141</yloc>
+      <xloc>391</xloc>
+      <yloc>223</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>prep 2</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;Script here
+var target_bank = new_bank_id;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>target_bank</name>
+        <rename>target_bank</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>788</xloc>
+      <yloc>326</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -579,7 +733,7 @@ if (substr(bank_by_iban, 0, 2) == &apos;ES&apos;) {
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1118</xloc>
+      <xloc>1150</xloc>
       <yloc>220</yloc>
       <draw>Y</draw>
       </GUI>
@@ -597,7 +751,7 @@ if (substr(bank_by_iban, 0, 2) == &apos;ES&apos;) {
            </partitioning>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>158</xloc>
+      <xloc>155</xloc>
       <yloc>220</yloc>
       <draw>Y</draw>
       </GUI>
@@ -615,8 +769,26 @@ if (substr(bank_by_iban, 0, 2) == &apos;ES&apos;) {
            </partitioning>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1020</xloc>
+      <xloc>1052</xloc>
       <yloc>221</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>union</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>854</xloc>
+      <yloc>217</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -74,7 +74,7 @@
     <type>POSTGRESQL</type>
     <access>Native</access>
     <database>${source}</database>
-    <port>${source_port}</port>
+    <port>5432</port>
     <username>${source_user}</username>
     <password>${source_password}</password>
     <servername/>
@@ -84,7 +84,7 @@
       <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>${source_port}</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>5432</attribute></attribute>
       <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
       <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
@@ -113,7 +113,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Select values</from><to>Table output</to><enabled>N</enabled> </hop>  <hop> <from>Select values</from><to>target</to><enabled>Y</enabled> </hop>  <hop> <from>Table input</from><to>source</to><enabled>N</enabled> </hop>  <hop> <from>create_uid</from><to>write_uid</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>create_uid</to><enabled>Y</enabled> </hop>  <hop> <from>target</from><to>Table output</to><enabled>N</enabled> </hop>  <hop> <from>write_uid</from><to>Add constants</to><enabled>Y</enabled> </hop>  <hop> <from>Add constants</from><to>write_uid 2</to><enabled>Y</enabled> </hop>  <hop> <from>write_uid 2</from><to>template sequence</to><enabled>Y</enabled> </hop>  <hop> <from>template sequence</from><to>Templates</to><enabled>Y</enabled> </hop>  <hop> <from>Templates</from><to>product sequence</to><enabled>Y</enabled> </hop>  <hop> <from>product sequence</from><to>products</to><enabled>Y</enabled> </hop>  <hop> <from>assets</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>products</from><to>Code</to><enabled>Y</enabled> </hop>  <hop> <from>Code</from><to>assets</to><enabled>Y</enabled> </hop>  <hop> <from>Row Normaliser</from><to>Stream lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Stream lookup</from><to>prep</to><enabled>Y</enabled> </hop>  <hop> <from>fields</from><to>Stream lookup</to><enabled>Y</enabled> </hop>  <hop> <from>prep</from><to>property</to><enabled>Y</enabled> </hop>  <hop> <from>Templates</from><to>Row Normaliser</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>Select values</from><to>Table output</to><enabled>N</enabled> </hop>  <hop> <from>Select values</from><to>target</to><enabled>Y</enabled> </hop>  <hop> <from>Table input</from><to>source</to><enabled>N</enabled> </hop>  <hop> <from>create_uid</from><to>write_uid</to><enabled>Y</enabled> </hop>  <hop> <from>source</from><to>create_uid</to><enabled>Y</enabled> </hop>  <hop> <from>target</from><to>Table output</to><enabled>N</enabled> </hop>  <hop> <from>write_uid</from><to>Add constants</to><enabled>Y</enabled> </hop>  <hop> <from>Add constants</from><to>write_uid 2</to><enabled>Y</enabled> </hop>  <hop> <from>write_uid 2</from><to>template sequence</to><enabled>Y</enabled> </hop>  <hop> <from>template sequence</from><to>Templates</to><enabled>Y</enabled> </hop>  <hop> <from>Templates</from><to>product sequence</to><enabled>Y</enabled> </hop>  <hop> <from>product sequence</from><to>products</to><enabled>Y</enabled> </hop>  <hop> <from>products</from><to>Code</to><enabled>Y</enabled> </hop>  <hop> <from>Row Normaliser</from><to>Stream lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Stream lookup</from><to>prep</to><enabled>Y</enabled> </hop>  <hop> <from>fields</from><to>Stream lookup</to><enabled>Y</enabled> </hop>  <hop> <from>prep</from><to>property</to><enabled>Y</enabled> </hop>  <hop> <from>Templates</from><to>Row Normaliser</to><enabled>Y</enabled> </hop>  <hop> <from>Code</from><to>Select values</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>Add constants</name>
     <type>Constant</type>
@@ -191,6 +191,17 @@
         <length>-1</length>
         <precision>-1</precision>
       </field>
+      <field>
+        <name>asset_type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>vehicle</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -222,8 +233,33 @@
       <max_value>999999999</max_value>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>926</xloc>
+      <xloc>946</xloc>
       <yloc>222</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Row Normaliser</name>
+    <type>Normaliser</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+   <typefield>field</typefield>
+    <fields>      <field>        <name>list_price</name>
+        <value>list_price</value>
+        <norm>value</norm>
+        </field>      <field>        <name>cost_price</name>
+        <value>cost_price</value>
+        <norm>value</norm>
+        </field>      </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>686</xloc>
+      <yloc>103</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -241,9 +277,7 @@
     <fields>        <select_unspecified>N</select_unspecified>
       <remove>        <name>create_uid</name>
       </remove>      <remove>        <name>write_uid</name>
-      </remove>      <remove>        <name>code</name>
       </remove>      <remove>        <name>product_active</name>
-      </remove>      <remove>        <name>product_id</name>
       </remove>      <remove>        <name>type</name>
       </remove>      <remove>        <name>uom</name>
       </remove>      <remove>        <name>uom_symbol</name>
@@ -275,10 +309,69 @@
         <grouping_symbol/>
         <currency_symbol/>
         <storage_type/>
+      </meta>      <meta>        <name>product_id</name>
+        <rename>product</rename>
+        <type>Integer</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>      <meta>        <name>asset_type</name>
+        <rename>type</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
       </meta>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1088</xloc>
+      <xloc>1042</xloc>
       <yloc>220</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Stream lookup</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <from>fields</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>field</name>
+        <field>name</field>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>field_id</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>777</xloc>
+      <yloc>105</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -339,7 +432,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1189</xloc>
+      <xloc>1143</xloc>
       <yloc>343</yloc>
       <draw>Y</draw>
       </GUI>
@@ -403,59 +496,6 @@
     </step>
 
   <step>
-    <name>assets</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <schema/>
-    <table>asset</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>asset</return_field>
-    <fields>
-        <field>
-          <column_name>active</column_name>
-          <stream_name>active</stream_name>
-        </field>
-        <field>
-          <column_name>product</column_name>
-          <stream_name>product_id</stream_name>
-        </field>
-        <field>
-          <column_name>name</column_name>
-          <stream_name>name</stream_name>
-        </field>
-        <field>
-          <column_name>code</column_name>
-          <stream_name>code</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>996</xloc>
-      <yloc>221</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>create_uid</name>
     <type>DBLookup</type>
     <description/>
@@ -492,6 +532,71 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>227</xloc>
       <yloc>223</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>fields</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <sql>select f.id,f.name                                                             
+from ir_model_field f                                                          
+    join ir_model m on m.id = f.model                                          
+where m.model = &apos;product.template&apos; and f.name like &apos;%_price&apos;;  </sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>777</xloc>
+      <yloc>29</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>prep</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;Script here
+var res = &apos;product.template,&apos;+template_id;
+var value = &apos;,&apos;+value;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>res</name>
+        <rename>res</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>value</name>
+        <rename>value</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>850</xloc>
+      <yloc>100</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -574,6 +679,59 @@
     </step>
 
   <step>
+    <name>property</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <schema/>
+    <table>ir_property</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>N</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>Y</return_keys>
+    <return_field>party</return_field>
+    <fields>
+        <field>
+          <column_name>res</column_name>
+          <stream_name>res</stream_name>
+        </field>
+        <field>
+          <column_name>value</column_name>
+          <stream_name>value</stream_name>
+        </field>
+        <field>
+          <column_name>company</column_name>
+          <stream_name>company</stream_name>
+        </field>
+        <field>
+          <column_name>field</column_name>
+          <stream_name>field_id</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>941</xloc>
+      <yloc>99</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>source</name>
     <type>Dummy</type>
     <description/>
@@ -603,7 +761,7 @@
            </partitioning>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1175</xloc>
+      <xloc>1129</xloc>
       <yloc>216</yloc>
       <draw>Y</draw>
       </GUI>
@@ -715,184 +873,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>477</xloc>
       <yloc>221</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Row Normaliser</name>
-    <type>Normaliser</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-   <typefield>field</typefield>
-    <fields>      <field>        <name>list_price</name>
-        <value>list_price</value>
-        <norm>value</norm>
-        </field>      <field>        <name>cost_price</name>
-        <value>cost_price</value>
-        <norm>value</norm>
-        </field>      </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>686</xloc>
-      <yloc>103</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Stream lookup</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <from>fields</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>field</name>
-        <field>name</field>
-      </key>
-      <value>
-        <name>id</name>
-        <rename>field_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>777</xloc>
-      <yloc>105</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>fields</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <sql>select f.id,f.name                                                             
-from ir_model_field f                                                          
-    join ir_model m on m.id = f.model                                          
-where m.model = &apos;product.template&apos; and f.name like &apos;%_price&apos;;  </sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>777</xloc>
-      <yloc>29</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>prep</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#47;&#47;Script here
-var res = &apos;product.template,&apos;+template_id;
-var value = &apos;,&apos;+value;</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>res</name>
-        <rename>res</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>      <field>        <name>value</name>
-        <rename>value</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>Y</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>850</xloc>
-      <yloc>100</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>property</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <schema/>
-    <table>ir_property</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>party</return_field>
-    <fields>
-        <field>
-          <column_name>res</column_name>
-          <stream_name>res</stream_name>
-        </field>
-        <field>
-          <column_name>value</column_name>
-          <stream_name>value</stream_name>
-        </field>
-        <field>
-          <column_name>company</column_name>
-          <stream_name>company</stream_name>
-        </field>
-        <field>
-          <column_name>field</column_name>
-          <stream_name>field_id</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>941</xloc>
-      <yloc>99</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
